@@ -25,13 +25,14 @@ lon_coord = args.y
 
 coord_re = re.compile(r'\d*(?:\.\d*)?[NSEW]')
 
-if type(lat_coord) == str:
+if isinstance(lat_coord,str):
     if coord_re.match(lat_coord):
         lat_coord = float(lat_coord[:-1]) if lat_coord[-1].upper() == "E" else float(lat_coord[:-1]) * -1 
     else:
         lat_coord = float(lat_coord)
 
-if type(lon_coord) == str:
+if isinstance(lon_coord,str):
+
     if coord_re.match(lon_coord):
         lon_coord = int(lon_coord[:-1]) if lon_coord[-1].upper() == "S" else int(lon_coord[:-1]) * -1 
     else:
@@ -49,9 +50,9 @@ def distance_between(p1, p2):
 data = ""
 
 with open("prefabs.xml", "r") as xml:
-    data = "".join(xml.readlines())
+    prefabs = bs(xml, "lxml")
 
-prefabs = bs(data, "lxml")
+
 
 decs = []
 
@@ -62,7 +63,7 @@ for dec in  prefabs.find_all("decoration"):
 
 for dec in decs:
     position = dec['position']
-    dec['distance'] = distance_between(input_point, position)
+    dec['distance'] = str(round(distance_between(input_point, position), 3)) + "M" 
     deg_direction = math.fabs(math.atan2(position[1] - input_point[1], position[0] - input_point[0]) * 100)
 
     cardinals = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N"]

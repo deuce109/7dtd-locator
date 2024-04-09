@@ -7,3 +7,4 @@ Scripts
 share
 Include
 pyvenv.cfg
+*.txt

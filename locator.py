@@ -78,11 +78,11 @@ class Locator():
         img = pt.imread(os.path.join(self.base_path, file))
         ax.imshow(img,extent=(half_size * -1,half_size,half_size,half_size*-1))
 
-    def _add_plot_layer(self, ax, items, color:str, marker="o", size=3 ):
+    def _add_plot_layer(self, ax, items, color:str, marker="o", size=3, label=None ):
         x = [item['position'][0] for item in items]
         y = [item['position'][1] for item in items]
 
-        ax.scatter(x, y, c=color, marker=marker, s=size)
+        ax.scatter(x, y, c=color, marker=marker, s=size, label=label)
 
     def _add_single_point_layer(self, ax, x, y, color:str, marker="o", size=3):
         ax.scatter(x, y , c=color, marker=marker, s=size)
@@ -131,10 +131,10 @@ class Locator():
         self._add_img_layer(ax, 'splat4.png')
         self._add_img_layer(ax, 'radiation.png')
 
-        self._add_plot_layer(ax, decs, "#B80000")
-        self._add_plot_layer(ax, spawns, "#ADD8E6", size=2)
+        self._add_plot_layer(ax, decs, "#B80000", label="Prefabs", size=5)
+        self._add_plot_layer(ax, spawns, "#ADD8E6", size=2, label="Spawnpoints")
 
-        self._add_single_point_layer(ax, self.center_point[0], self.center_point[1], color="red", marker='x', size=2)
+        self._add_single_point_layer(ax, self.center_point[0], self.center_point[1], color="yellow", marker='x', size=2)
 
 
         ax.tick_params(axis='x', colors='#DAE1E7')
@@ -145,17 +145,39 @@ class Locator():
         ax.spines['left'].set_color('#DAE1E7')
         ax.spines['right'].set_color('#DAE1E7')
 
+        ax.legend()
+
         mpl.rcParams.update({'text.color': '#DAE1E7', 'axes.labelcolor': '#DAE1E7'})
 
 
         pt.show()
 
+    def _pad_line(self, line, max_length):
+        
+        m_index = line.find(" ")
+        padding = " " * (max_length - len(line))
+        return line[:m_index+1] + padding + line[m_index+1:]
+
+
+    def _pad_lines(self,lines):
+        max_length = max([len(line) for line in lines])
+        return [self._pad_line(line, max_length) for line in lines]
+        
 
     def generate_data_file(self, output_file: str):
 
         decs = self.locate_prefabs()
+        decs.sort(key= lambda x: float(x["distance"].replace("M", "")))
+        
+        spawns = self.locate_spawnpoints()
+        spawns.sort(key= lambda x: float(x["distance"].replace("M", "")))
+
 
         with open(output_file, 'w') as output_writer:
-            decs.sort(key= lambda x: x["distance"])
-            for dec in decs:
-                output_writer.write(format("{name} @ {distance} {direction}\n".format(**dec)))
+            
+            output_writer.write("########## SPAWNPOINTS ###########\n")
+            output_writer.writelines([format("{distance} {direction}\n".format(**spawn)) for spawn in spawns])
+
+            output_writer.write("########## PREFABS ###########\n")
+            output_writer.writelines(self._pad_lines([format("{name} {distance} {direction}\n".format(**dec)) for dec in decs]))
+

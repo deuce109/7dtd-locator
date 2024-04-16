@@ -1,0 +1,86 @@
+[
+    {
+        "id_regex": "^school_daycare_\\d\\d",
+        "name": "School / Daycare"
+    },
+    {
+        "id_regex": "^countrytown_business_\\d\\d",
+        "name": "Business"
+    },
+    {
+        "id_regex": "^lot_industrial_\\d\\d",
+        "name": "Industrial Lot"
+    },
+    {
+        "id_regex": "^utility_celltower_\\d\\d",
+        "name": "Cell Tower"
+    },
+    {
+        "id_regex": "^lot_vacant_\\d\\d",
+        "name": "Vacant Lot"
+    },
+    {
+        "id_regex": "^remnant_burnt_\\d\\d",
+        "name": "Burnt House Remnant"
+    },
+    {
+        "id_regex": "^remnant_house_\\d\\d",
+        "name": "House Remnant"
+    },
+    {
+        "id_regex": "^remnant_business_\\d\\d",
+        "name": "Business Remnant"
+    },
+    {
+        "id_regex": "^fastfood_\\d\\d",
+        "name": "Fast Food Restaurant"
+    },
+    {
+        "id_regex": "^store_autoparts_\\d\\d",
+        "name": "Auto Parts Store"
+    },
+    {
+        "id_regex": "^utility_substation_\\d\\d",
+        "name": "Power Sub Station"
+    },
+    {
+        "id_regex": "^house_construction_\\d\\d",
+        "name": "House In Construction"
+    },
+    {
+        "id_regex": "^store_hardware_\\d\\d",
+        "name": "Hardware Store"
+    },
+    {
+        "id_regex": "^lot_country_\\d\\d",
+        "name": "Country Lot"
+    },
+    {
+        "id_regex": "^business_burnt_\\d\\d",
+        "name": "Burnt Business"
+    },
+    {
+        "id_regex": "^remnant_oldwest_\\d\\d",
+        "name": "Old West Remnant"
+    },
+    {
+        "id_regex": "^country_junkyard_\\d\\d",
+        "name": "Junkyard"
+    },
+    {
+        "id_regex": "^bombshelter_\\d\\d",
+        "name": "Bomb Shelter"
+    },
+    {
+        "id_regex": "^installation_red_mesa",
+        "name": "Red Mesa Installation"
+    },
+    {
+        "id_regex": "^oldwest",
+        "replace": "Old West"
+    },
+    {
+        "id_regex": "(?:^(?:rwg|part)|(?:filler$))",
+        "name": ""
+    }
+]

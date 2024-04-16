@@ -1,3 +1,4 @@
+import logging
 import re
 import os
 import zlib
@@ -5,20 +6,28 @@ import zlib
 coord_re = re.compile(r'\d*(?:\.\d*)?[NSEW]')
 
 def convert_coords(lat_coord, lon_coord):
-    if isinstance(lat_coord,str):
-        if coord_re.match(lat_coord):
-            lat_coord = float(lat_coord[:-1]) if lat_coord[-1].upper() == "E" else float(lat_coord[:-1]) * -1 
-        else:
-            lat_coord = float(lat_coord)
+    try:
+        if isinstance(lat_coord,str):
+            if coord_re.match(lat_coord):
+                lat_coord = float(lat_coord[:-1]) if lat_coord[-1].upper() == "E" else float(lat_coord[:-1]) * -1 
+            else:
+                lat_coord = float(lat_coord)
 
-    if isinstance(lon_coord,str):
+        if isinstance(lon_coord,str):
 
-        if coord_re.match(lon_coord):
-            lon_coord = int(lon_coord[:-1]) if lon_coord[-1].upper() == "S" else int(lon_coord[:-1]) * -1 
-        else:
-            lon_coord = float(lon_coord)
+            if coord_re.match(lon_coord):
+                lon_coord = int(lon_coord[:-1]) if lon_coord[-1].upper() == "S" else int(lon_coord[:-1]) * -1 
+            else:
+                lon_coord = float(lon_coord)
 
-    return (float(lat_coord), float(lon_coord))
+        logging.info("Input coordinates verified")
+
+        return (float(lat_coord), float(lon_coord))
+
+    except Exception as e:
+
+        logging.warn(e)
+        return None
 
 
 
@@ -39,3 +48,27 @@ def check_path(world_path: str) -> bool:
         return valid
     except FileNotFoundError as e:
         return False
+    except Exception as e:
+        logging.error(e)
+        return False
+
+def validate_filter(filter_string: str) -> re.Pattern:
+        try:
+            return re.compile(filter_string)
+        except Exception as e:
+            logging.warn(e)
+            return None
+
+def determine_logging_level(logging_level):
+    match logging_level:
+
+        case  "DEBUG":
+            return logging.DEBUG
+        case  "INFO":
+            return logging.INFO
+        case  "WARNING":
+            return logging.WARNING
+        case  "ERROR":
+            return logging.ERROR
+        case  "FATAL":
+            return logging.FATAL
